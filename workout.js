@@ -4,12 +4,56 @@ class Workout {
     this.type = type.toUpperCase();
     this.exercises = exercises;
   }
+
+  html() {
+    const container = document.createElement('div');
+    container.className = 'workout';
+
+    const title = document.createElement('h4');
+    title.innerHTML = `${new Date(this.date).toLocaleDateString('en-GB')} <small>${this.type}</small>`;
+    container.appendChild(title);
+
+    const exerciseList = document.createElement('ul');
+    exerciseList.className = 'exercise-list row';
+
+    this.exercises.forEach((exercise) => {
+      const element = document.createElement('li');
+      element.className = 'exercise three columns';
+      element.innerHTML = `<strong>${exercise.name}</strong>`;
+
+      const sets = document.createElement('ol');
+      sets.className = 'set-list';
+      exercise.sets.forEach((set) => {
+        const el = document.createElement('li');
+        el.innerText = `${set.weight}kg - ${set.reps}`;
+        sets.appendChild(el);
+      });
+
+      element.appendChild(sets);
+      exerciseList.appendChild(element);
+    });
+
+    container.appendChild(exerciseList);
+    return container;
+  }
 }
 
 class Exercise {
   constructor(name, sets) {
     this.name = name;
     this.sets = sets;
+  }
+
+  html() {
+    const element = document.createElement('li');
+    element.className = 'exercise three columns';
+    element.innerHTML = `<strong>${this.name}</strong>`;
+
+    const sets = document.createElement('ol');
+    sets.className = 'set-list';
+    this.sets.forEach((set) => {
+      sets.appendChild(set.html());
+    });
   }
 }
 
@@ -18,6 +62,12 @@ class ExerciseSet {
     this.weight = weight;
     this.reps = reps;
     this.amrap = amrap;
+  }
+
+  html() {
+    const el = document.createElement('li');
+    el.innerText = `${this.weight}kg - ${this.reps}`;
+    return el;
   }
 }
 
