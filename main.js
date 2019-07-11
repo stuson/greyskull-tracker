@@ -22,12 +22,7 @@ function classifyStorage(workouts) {
   return newWorkouts;
 }
 
-function getWorkouts(pageArg) {
-  let page = pageArg;
-  if (arguments.length < 1) {
-    page = 1;
-  }
-
+function getWorkouts(page = 1) {
   const workouts = JSON.parse(
     localStorage.getItem('workouts'),
   ).slice((page - 1) * PAGINATE_BY, (page - 1) * PAGINATE_BY + PAGINATE_BY);
