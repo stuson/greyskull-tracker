@@ -109,3 +109,33 @@ header {
     list-style: none;
     margin: 0px 2px;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    border: 1px solid #F5EBF3;
+    align-items: stretch;
+    width: min-content;
+    margin: auto;
+    border-radius: 5px;
+}
+
+.pagination-button {
+    color: white;
+    background-color: none;
+    border: none;
+    border-radius: 0px;
+    width: 30px;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+}
+
+.pagination-button.active {
+    background-color: #13AF90;
+}
+
+.pagination-button:hover {
+    opacity: 0.8;
+    color: white;
+}
