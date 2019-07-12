@@ -140,3 +140,7 @@ header {
     opacity: 0.8;
     color: white;
 }
+
+.input-sm {
+    width: 80px;
+}
