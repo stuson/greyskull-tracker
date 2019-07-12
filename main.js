@@ -82,5 +82,3 @@ function getPagination(page) {
 
   return pagination;
 }
-
-populateWorkoutHistory();
