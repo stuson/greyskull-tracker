@@ -175,3 +175,7 @@ input[disabled] {
 .exercise-row label {
     display: inline-block;
 }
+
+input {
+    font-size: 16px;
+}
