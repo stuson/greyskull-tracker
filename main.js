@@ -16,7 +16,7 @@ function classifyStorage(workouts) {
       newExercises.push(new Exercise(exercise.name, newSets));
     });
 
-    newWorkouts.push(new Workout(workout.date, workout.type, newExercises));
+    newWorkouts.push(new Workout(workout.date, workout.type, newExercises, workout.id));
   });
 
   return newWorkouts;
@@ -91,4 +91,8 @@ function getPagination(page) {
   }
 
   return pagination;
+}
+
+function getMaxWorkoutId(workouts) {
+  return Math.max(...workouts.map(x => x.id));
 }

@@ -1,8 +1,9 @@
 class Workout {
-  constructor(date, type, exercises) {
+  constructor(date, type, exercises, id) {
     this.date = date;
     this.type = type.toUpperCase();
     this.exercises = exercises;
+    this.id = id;
   }
 
   html() {
@@ -126,7 +127,8 @@ function getDefaultWorkout(type) {
     );
   });
 
-  return new Workout(new Date(), type, defaultExercises);
+  const workouts = getWorkouts();
+  return new Workout(new Date(), type, defaultExercises, getMaxWorkoutId(workouts) + 1);
 }
 
 function getNextWeight(previousInstance, map) {

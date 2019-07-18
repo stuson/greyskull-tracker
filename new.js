@@ -166,8 +166,8 @@ function submitWorkout() {
     exercises.push(new Exercise(exerciseName, sets));
   });
 
-  const workout = new Workout(date, type, exercises);
   let workouts = getWorkouts();
+  const workout = new Workout(date, type, exercises, getMaxWorkoutId(workouts) + 1);
   let done = false;
 
   workouts = workouts.reduce((acc, curr) => {
