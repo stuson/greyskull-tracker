@@ -101,7 +101,7 @@ function exerciseNameChanged(input) {
   const amrap = map ? map.amrap : null;
 
   if (lastWorkoutInstance) {
-    document.getElementsByName(`previous-date-${exerciseRow}`)[0].innerText = `Previous: ${lastWorkoutInstance.date.slice(0, 10)}`;
+    document.getElementsByName(`previous-date-${exerciseRow}`)[0].innerText = `Previous: ${lastWorkoutInstance.date.toISOString().slice(0, 10)}`;
   } else {
     document.getElementsByName(`previous-date-${exerciseRow}`)[0].innerText = null;
   }
