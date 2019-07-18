@@ -55,7 +55,7 @@ function populateDefaultExercises(workouts) {
     document.getElementsByName(`exercise-${i}`)[0].value = exercise.getDisplayName();
 
     if (lastWorkoutInstance) {
-      document.getElementsByName(`previous-date-${i}`)[0].innerText = `Previous: ${lastWorkoutInstance.date.slice(0, 10)}`;
+      document.getElementsByName(`previous-date-${i}`)[0].innerText = `Previous: ${lastWorkoutInstance.date.toISOString().slice(0, 10)}`;
     } else {
       document.getElementsByName(`previous-date-${i}`)[0].innerText = 'Previous: Never';
     }
@@ -163,5 +163,20 @@ function submitWorkout() {
   });
 
   const workout = new Workout(date, type, exercises);
-  console.log(workout);
+  let workouts = getWorkouts();
+  let done = false;
+
+  workouts = workouts.reduce((acc, curr) => {
+    if (!done && curr.date < workout.date) {
+      done = true;
+      return acc.concat(workout, curr);
+    }
+    return acc.concat(curr);
+  }, []);
+
+  if (!done) {
+    workouts.push(workout);
+  }
+
+  console.log(workouts);
 }

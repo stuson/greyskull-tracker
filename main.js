@@ -31,6 +31,11 @@ function getWorkouts(page) {
     workouts = workouts.slice((page - 1) * PAGINATE_BY, (page - 1) * PAGINATE_BY + PAGINATE_BY);
   }
 
+  workouts = workouts.reduce((acc, curr) => {
+    curr.date = new Date(curr.date);
+    return acc.concat(curr);
+  }, []);
+
   return classifyStorage(workouts);
 }
 
