@@ -23,13 +23,13 @@ function classifyStorage(workouts) {
 }
 
 function getWorkouts(page) {
-  let workouts = JSON.parse(
-    localStorage.getItem('workouts'),
-  );
+  let workouts = localStorage.getItem('workouts');
 
   if (!workouts) {
     workouts = [];
     localStorage.setItem('workouts', workouts);
+  } else {
+    workouts = JSON.parse(workouts);
   }
 
   if (page) {
