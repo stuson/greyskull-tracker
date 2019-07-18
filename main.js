@@ -4,10 +4,10 @@ const PAGINATE_BY = 2;
 function classifyStorage(workouts) {
   const newWorkouts = [];
   workouts.forEach((workout) => {
-    const newExercises = []
+    const newExercises = [];
 
     workout.exercises.forEach((exercise) => {
-      const newSets = []
+      const newSets = [];
 
       exercise.sets.forEach((set) => {
         newSets.push(new ExerciseSet(set.weight, set.reps, set.amrap));

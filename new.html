@@ -10,7 +10,7 @@
     <title>Greyskull</title>
 </head>
 
-<body>
+<body onload="setupNew()">
     <!-- Site Header -->
     <header>
         <nav class="container">
@@ -33,15 +33,15 @@
             <div class="six columns">
                 <label>Date:</label>
                 <select id="day">
-                    <option value="01">1</option>
-                    <option value="02">2</option>
-                    <option value="03">3</option>
-                    <option value="04">4</option>
-                    <option value="05">5</option>
-                    <option value="06">6</option>
-                    <option value="07">7</option>
-                    <option value="08">8</option>
-                    <option value="09">9</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
                     <option value="10">10</option>
                     <option value="11">11</option>
                     <option value="12">12</option>
@@ -66,15 +66,15 @@
                     <option value="31">31</option>
                 </select>
                 <select id="month">
-                    <option value="01">1</option>
-                    <option value="02">2</option>
-                    <option value="03">3</option>
-                    <option value="04">4</option>
-                    <option value="05">5</option>
-                    <option value="06">6</option>
-                    <option value="07">7</option>
-                    <option value="08">8</option>
-                    <option value="09">9</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
                     <option value="10">10</option>
                     <option value="11">11</option>
                     <option value="12">12</option>
@@ -133,8 +133,8 @@
                 </select>
             </div>
             <div class="six columns">
-                <label>Workout Type:</label>
-                <select id="workout-type">
+                <label>Workout Type: <span id="previous-type" class="text-dimmed"></span></label>
+                <select id="workout-type" onchange="workoutTypeChanged()">
                     <option>A1</option>
                     <option>A2</option>
                     <option>B1</option>
@@ -145,10 +145,11 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row exercise-row">
             <div class="three columns">
                 <label>Exercise</label>
-                <input type="text" list="exercises">
+                <input class="exercise-input" name="exercise-0" type="text" list="exercises"
+                    onchange="exerciseNameChanged(this)">
                 <datalist id="exercises">
                     <option>Bench</option>
                     <option>Overhead press</option>
@@ -163,127 +164,218 @@
             </div>
             <div class="three columns">
                 <label>Set 1</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-0-0" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-0-0" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-0-0" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 2</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-0-1" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-0-1" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-0-1" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 3</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-0-2" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-0-2" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-0-2" type="number" class="input-sm" placeholder="reps">
             </div>
         </div>
 
-        <div class="row">
+        <div class="row previous-exercise">
+            <div class="three columns previous-date-container">
+                <span name="previous-date-0" class="previous-date"></span>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-0-0" class="previous-set-weight"></span>
+                    <span name="previous-reps-0-0" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-0-1" class="previous-set-weight"></span>
+                    <span name="previous-reps-0-1" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-0-2" class="previous-set-weight"></span>
+                    <span name="previous-reps-0-2" class="previous-set-reps"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row exercise-row">
             <div class="three columns">
                 <label>Exercise</label>
-                <input type="text" list="exercises">
-                <datalist id="exercises">
-                    <option>Bench</option>
-                    <option>Overhead press</option>
-                    <option>Squat</option>
-                    <option>Row</option>
-                    <option>Supinating curl</option>
-                    <option>Deadlift</option>
-                    <option>Closegrip bench</option>
-                    <option>Lateral raises</option>
-                    <option>Hammer curl</option>
-                </datalist>
+                <input class="exercise-input" name="exercise-1" type="text" list="exercises"
+                    onchange="exerciseNameChanged(this)">
             </div>
             <div class="three columns">
                 <label>Set 1</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-1-0" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-1-0" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-1-0" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 2</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-1-1" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-1-1" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-1-1" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 3</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-1-2" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-1-2" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-1-2" type="number" class="input-sm" placeholder="reps">
             </div>
         </div>
 
-        <div class="row">
+        <div class="row previous-exercise">
+            <div class="three columns previous-date-container">
+                <span name="previous-date-1" class="previous-date"></span>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-1-0" class="previous-set-weight"></span>
+                    <span name="previous-reps-1-0" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-1-1" class="previous-set-weight"></span>
+                    <span name="previous-reps-1-1" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-1-2" class="previous-set-weight"></span>
+                    <span name="previous-reps-1-2" class="previous-set-reps"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row exercise-row">
             <div class="three columns">
                 <label>Exercise</label>
-                <input type="text" list="exercises">
-                <datalist id="exercises">
-                    <option>Bench</option>
-                    <option>Overhead press</option>
-                    <option>Squat</option>
-                    <option>Row</option>
-                    <option>Supinating curl</option>
-                    <option>Deadlift</option>
-                    <option>Closegrip bench</option>
-                    <option>Lateral raises</option>
-                    <option>Hammer curl</option>
-                </datalist>
+                <input class="exercise-input" name="exercise-2" type="text" list="exercises"
+                    onchange="exerciseNameChanged(this)">
             </div>
             <div class="three columns">
                 <label>Set 1</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-2-0" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-2-0" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-2-0" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 2</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-2-1" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-2-1" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-2-1" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 3</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-2-2" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-2-2" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-2-2" type="number" class="input-sm" placeholder="reps">
             </div>
         </div>
 
-        <div class="row">
+        <div class="row previous-exercise">
+            <div class="three columns previous-date-container">
+                <span name="previous-date-2" class="previous-date"></span>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-2-0" class="previous-set-weight"></span>
+                    <span name="previous-reps-2-0" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-2-1" class="previous-set-weight"></span>
+                    <span name="previous-reps-2-1" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-2-2" class="previous-set-weight"></span>
+                    <span name="previous-reps-2-2" class="previous-set-reps"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row exercise-row">
             <div class="three columns">
                 <label>Exercise</label>
-                <input type="text" list="exercises">
-                <datalist id="exercises">
-                    <option>Bench</option>
-                    <option>Overhead press</option>
-                    <option>Squat</option>
-                    <option>Row</option>
-                    <option>Supinating curl</option>
-                    <option>Deadlift</option>
-                    <option>Closegrip bench</option>
-                    <option>Lateral raises</option>
-                    <option>Hammer curl</option>
-                </datalist>
+                <input class="exercise-input" name="exercise-3" type="text" list="exercises"
+                    onchange="exerciseNameChanged(this)">
             </div>
             <div class="three columns">
                 <label>Set 1</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-3-0" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-3-0" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-3-0" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 2</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-3-1" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-3-1" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-3-1" type="number" class="input-sm" placeholder="reps">
             </div>
             <div class="three columns">
                 <label>Set 3</label>
-                <input type="number" class="input-sm" placeholder="kg">
-                <input type="number" class="input-sm" placeholder="reps">
+                <label class="amrap-label">AMRAP</label><input name="amrap-3-2" class="amrap-input" type="checkbox">
+                <br>
+                <input name="weight-3-2" type="number" class="input-sm" placeholder="kg">
+                <input name="reps-3-2" type="number" class="input-sm" placeholder="reps">
             </div>
         </div>
 
-        <button class="button-primary" onclick="submitworkout()">Submit</button>
+        <div class="row previous-exercise">
+            <div class="three columns previous-date-container">
+                <span name="previous-date-3" class="previous-date"></span>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-3-0" class="previous-set-weight"></span>
+                    <span name="previous-reps-3-0" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-3-1" class="previous-set-weight"></span>
+                    <span name="previous-reps-3-1" class="previous-set-reps"></span>
+                </div>
+            </div>
+            <div class="three columns">
+                <div class="previous-set">
+                    <span name="previous-weight-3-2" class="previous-set-weight"></span>
+                    <span name="previous-reps-3-2" class="previous-set-reps"></span>
+                </div>
+            </div>
+        </div>
+
+        <button class="button-primary" onclick="submitWorkout()">Submit</button>
     </div>
     <!-- End workout Items -->
 
     <!-- Scripts -->
     <script src="workout.js"></script>
     <script src="main.js"></script>
+    <script src="new.js"></script>
     <!-- End Scripts -->
 </body>
 

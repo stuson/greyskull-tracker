@@ -141,6 +141,37 @@ header {
     color: white;
 }
 
+#new-workout-container input {
+    margin-bottom: 2px;
+}
+
 .input-sm {
     width: 80px;
+}
+
+.text-dimmed {
+    opacity: 0.4;
+    font-size: smaller;
+}
+
+.previous-exercise {
+    opacity: 0.4;
+    font-weight: bold;
+}
+
+.previous-exercise span {
+    text-align: center;
+}
+
+.previous-set-weight, .previous-set-reps {
+    display: inline-block;
+    width: 80px;
+}
+
+input[disabled] {
+    opacity: 0.4;
+}
+
+.exercise-row label {
+    display: inline-block;
 }

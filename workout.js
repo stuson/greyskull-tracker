@@ -55,6 +55,10 @@ class Exercise {
       sets.appendChild(set.html());
     });
   }
+
+  getDisplayName() {
+    return `${this.name[0].toUpperCase()}${this.name.slice(1)}`;
+  }
 }
 
 class ExerciseSet {
@@ -82,6 +86,18 @@ const setMap = {
   'lateral raises': { sets: 3, reps: 10, amrap: false },
   'hammer curl': { sets: 3, reps: 10, amrap: false },
 };
+
+function getPreviousExerciseInstanceWorkout(exerciseName, workoutHistory) {
+  return workoutHistory.find(
+    workout => workout.exercises.some(exercise => exercise.name === exerciseName),
+  );
+}
+
+function getPreviousExerciseInstance(exerciseName, workoutHistory) {
+  return workoutHistory
+    .reduce((acc, curr) => acc.concat(curr.exercises), [])
+    .find(ex => ex.name === exerciseName);
+}
 
 function getDefaultWorkout(type) {
   const workoutType = type.slice(0, 1);
@@ -113,16 +129,11 @@ function getDefaultWorkout(type) {
   return new Workout(new Date(), type, defaultExercises);
 }
 
-function getDefaultSets(exercise) {
-  const workoutHistory = JSON.parse(localStorage.getItem('workouts'));
-  const previousInstance = workoutHistory
-    .reduce((acc, curr) => acc.concat(curr.exercises), [])
-    .find(ex => ex.name === exercise);
+function getNextWeight(previousInstance, map) {
   const minWeight = previousInstance
     .sets
     .reduce((acc, curr) => Math.min(acc, curr.weight), Infinity);
 
-  const map = setMap[exercise];
   // TODO: More complicated nextWeight calculation
   const nextWeight = minWeight + 2.5 * previousInstance.sets.reduce(
     (acc, curr) => {
@@ -131,11 +142,28 @@ function getDefaultSets(exercise) {
     true,
   );
 
+  return nextWeight;
+}
+
+function getDefaultSets(exercise) {
+  const workoutHistory = JSON.parse(localStorage.getItem('workouts'));
+  const previousInstance = getPreviousExerciseInstance(exercise, workoutHistory);
+  const map = setMap[exercise];
   const sets = [];
-  for (let i = 0; i < map.sets; i += 1) {
-    sets.push(
-      new ExerciseSet(nextWeight, map.reps, i === (map.sets - 1) && map.amrap),
-    );
+
+  if (previousInstance) {
+    const nextWeight = getNextWeight(previousInstance, map);
+    for (let i = 0; i < map.sets; i += 1) {
+      sets.push(
+        new ExerciseSet(nextWeight, map.reps, i === (map.sets - 1) && map.amrap),
+      );
+    }
+  } else {
+    for (let i = 0; i < map.sets; i += 1) {
+      sets.push(
+        new ExerciseSet(null, map.reps, i === (map.sets - 1) && map.amrap),
+      );
+    }
   }
 
   return sets;
