@@ -179,3 +179,7 @@ input[disabled] {
 input {
     font-size: 16px;
 }
+
+select {
+    font-size: 16px;
+}
