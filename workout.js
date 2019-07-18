@@ -146,7 +146,7 @@ function getNextWeight(previousInstance, map) {
 }
 
 function getDefaultSets(exercise) {
-  const workoutHistory = JSON.parse(localStorage.getItem('workouts'));
+  const workoutHistory = getWorkouts();
   const previousInstance = getPreviousExerciseInstance(exercise, workoutHistory);
   const map = setMap[exercise];
   const sets = [];

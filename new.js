@@ -6,7 +6,11 @@ function setDefaultDate() {
 }
 
 function setLastWorkout(lastWorkout) {
-  document.getElementById('previous-type').innerText = `(Previous - ${lastWorkout.type})`;
+  if (lastWorkout) {
+    document.getElementById('previous-type').innerText = `(Previous - ${lastWorkout.type})`;
+  } else {
+    document.getElementById('previous-type').innerText = 'Previous - Never';
+  }
 }
 
 function checkDeadlift() {
