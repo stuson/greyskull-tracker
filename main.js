@@ -27,6 +27,11 @@ function getWorkouts(page) {
     localStorage.getItem('workouts'),
   );
 
+  if (!workouts) {
+    workouts = [];
+    localStorage.setItem('workouts', workouts);
+  }
+
   if (page) {
     workouts = workouts.slice((page - 1) * PAGINATE_BY, (page - 1) * PAGINATE_BY + PAGINATE_BY);
   }
