@@ -178,5 +178,5 @@ function submitWorkout() {
     workouts.push(workout);
   }
 
-  console.log(workouts);
+  localStorage.setItem('workouts', JSON.stringify(workouts));
 }
