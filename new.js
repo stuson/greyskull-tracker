@@ -96,14 +96,14 @@ function exerciseNameChanged(input) {
   const lastExerciseInstance = getPreviousExerciseInstance(name, workouts);
 
   const map = setMap[name];
-  const nextWeight = map ? getNextWeight(lastExerciseInstance, map) : null;
+  const nextWeight = map && lastExerciseInstance ? getNextWeight(lastExerciseInstance, map) : null;
   const reps = map ? map.reps : null;
   const amrap = map ? map.amrap : null;
 
   if (lastWorkoutInstance) {
     document.getElementsByName(`previous-date-${exerciseRow}`)[0].innerText = `Previous: ${lastWorkoutInstance.date.toISOString().slice(0, 10)}`;
   } else {
-    document.getElementsByName(`previous-date-${exerciseRow}`)[0].innerText = null;
+    document.getElementsByName(`previous-date-${exerciseRow}`)[0].innerText = 'Previous: Never';
   }
 
   if (lastExerciseInstance) {
@@ -130,6 +130,145 @@ function exerciseNameChanged(input) {
   }
 
   checkDeadlift();
+}
+
+function addExercise() {
+  const rowNum = 1 + Math.max(
+    ...Array.from(document.getElementsByClassName('exercise-input'))
+      .map(el => Number(el.name.slice(-1))),
+  );
+
+  function createExerciseNameInputSection() {
+    const section = document.createElement('div');
+    section.className = 'three columns';
+
+    const label = document.createElement('label');
+    label.innerText = 'Exercise';
+    section.appendChild(label);
+
+    const exerciseInput = document.createElement('input');
+    exerciseInput.className = 'exercise-input';
+    exerciseInput.name = `exercise-${rowNum}`;
+    exerciseInput.type = 'text';
+    exerciseInput.setAttribute('list', 'exercises');
+    exerciseInput.setAttribute('onchange', 'exerciseNameChanged(this)');
+    section.appendChild(exerciseInput);
+
+    return section;
+  }
+
+  function createSetsSection(i) {
+    const section = document.createElement('div');
+    section.className = 'three columns';
+
+    const label = document.createElement('label');
+    label.innerText = 'Set 1';
+    section.appendChild(label);
+
+    const label2 = document.createElement('label');
+    label2.className = 'amrap-label';
+    label2.innerText = 'AMRAP';
+    section.appendChild(label2);
+
+    const amrapInput = document.createElement('input');
+    amrapInput.name = `amrap-${rowNum}-${i}`;
+    amrapInput.className = 'amrap-input';
+    amrapInput.type = 'checkbox';
+    section.appendChild(amrapInput);
+
+    const br = document.createElement('br');
+    section.appendChild(br);
+
+    const weightInput = document.createElement('input');
+    weightInput.name = `weight-${rowNum}-${i}`;
+    weightInput.type = 'number';
+    weightInput.className = 'input-sm';
+    weightInput.placeholder = 'kg';
+    section.appendChild(weightInput);
+
+    const repsInput = document.createElement('input');
+    repsInput.name = `reps-${rowNum}-${i}`;
+    repsInput.type = 'number';
+    repsInput.className = 'input-sm';
+    repsInput.placeholder = 'reps';
+    section.appendChild(repsInput);
+
+    return section;
+  }
+
+  function createExerciseRow() {
+    const row = document.createElement('div');
+    row.className = 'row exercise-row';
+
+    const exerciseNameInputSection = createExerciseNameInputSection();
+    row.appendChild(exerciseNameInputSection);
+
+    for (let i = 0; i < 3; i += 1) {
+      row.appendChild(createSetsSection(i));
+    }
+
+    return row;
+  }
+
+  function createPreviousDateSection() {
+    const section = document.createElement('div');
+    section.className = 'three columns previous-date-container';
+
+    const span = document.createElement('span');
+    span.setAttribute('name', `previous-date-${rowNum}`);
+    span.className = 'previous-date';
+    section.appendChild(span);
+
+    return section;
+  }
+
+  function createPreviousSetsSection(i) {
+    const section = document.createElement('div');
+    section.className = 'three columns';
+
+    const set = document.createElement('div');
+    set.className = 'previous-set';
+
+    const weight = document.createElement('span');
+    weight.setAttribute('name', `previous-weight-${rowNum}-${i}`);
+    weight.className = 'previous-set-weight';
+    set.appendChild(weight);
+
+    const reps = document.createElement('span');
+    reps.setAttribute('name', `previous-reps-${rowNum}-${i}`);
+    reps.className = 'previous-set-reps';
+    set.appendChild(reps);
+
+    section.appendChild(set);
+
+    return section;
+  }
+
+  function createPreviousExerciseRow() {
+    const row = document.createElement('div');
+    row.className = 'row previous-exercise';
+
+    const previousDateSection = createPreviousDateSection();
+    row.appendChild(previousDateSection);
+
+    for (let i = 0; i < 3; i += 1) {
+      row.appendChild(createPreviousSetsSection(i));
+    }
+
+    return row;
+  }
+
+  const frag = document.createDocumentFragment();
+
+  const row = createExerciseRow();
+  frag.appendChild(row);
+
+  const previousRow = createPreviousExerciseRow();
+  frag.appendChild(previousRow);
+
+  document
+    .getElementById('new-workout-container')
+    .insertBefore(frag, document.getElementById('first-button'));
 }
 
 function setupNew() {
@@ -183,4 +322,5 @@ function submitWorkout() {
   }
 
   localStorage.setItem('workouts', JSON.stringify(workouts));
+  window.location = 'index.html';
 }

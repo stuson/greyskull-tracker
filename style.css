@@ -183,3 +183,15 @@ input {
 select {
     font-size: 16px;
 }
+
+.button-secondary {
+    color: #FFF;
+    background-color: #444;
+    border-color: #444;
+}
+
+.button-secondary:hover, .button-secondary:focus {
+    color: #FFF;
+    background-color: #3D3D3D;
+    border-color: #3D3D3D;
+}
