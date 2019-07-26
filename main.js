@@ -101,6 +101,7 @@ function getMaxWorkoutId(workouts) {
       }
       return 0;
     }),
+    0,
   );
 }
 
