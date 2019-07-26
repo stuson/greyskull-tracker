@@ -94,5 +94,60 @@ function getPagination(page) {
 }
 
 function getMaxWorkoutId(workouts) {
-  return Math.max(...workouts.map(x => x.id));
+  return Math.max(
+    ...workouts.map((x) => {
+      if (x.id) {
+        return x.id;
+      }
+      return 0;
+    }),
+  );
+}
+
+function confirmDeleteWorkout(btn) {
+  const workoutId = Number(btn.dataset.workoutId);
+
+  const dimmer = document.createElement('div');
+  dimmer.id = 'dimmer';
+  dimmer.onclick = cancelDelete;
+
+  const popup = document.createElement('div');
+  popup.className = 'confirm-delete-popup';
+
+  const txt = document.createElement('h4');
+  txt.innerText = 'Delete this workout?';
+  popup.appendChild(txt);
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'row button-container';
+
+  const confirmDelete = document.createElement('button');
+  confirmDelete.className = 'button-warn';
+  confirmDelete.innerText = 'Delete';
+  confirmDelete.onclick = deleteWorkout.bind(null, workoutId);
+  buttonContainer.appendChild(confirmDelete);
+
+  const cancel = document.createElement('button');
+  cancel.innerText = 'Cancel';
+  cancel.onclick = cancelDelete;
+  buttonContainer.appendChild(cancel);
+
+  popup.appendChild(buttonContainer);
+
+  dimmer.appendChild(popup);
+
+  document.body.appendChild(dimmer);
+}
+
+function cancelDelete(e) {
+  if (e.target === this) {
+    document.getElementById('dimmer').remove();
+  }
+}
+
+function deleteWorkout(workoutId) {
+  let workouts = getWorkouts();
+  workouts = workouts.filter(workout => workout.id !== workoutId);
+  localStorage.setItem('workouts', JSON.stringify(workouts));
+  window.location = 'index.html';
 }

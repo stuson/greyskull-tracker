@@ -292,35 +292,39 @@ function submitWorkout() {
   const exercises = [];
   Array.from(exerciseRows).forEach((exerciseRow, i) => {
     const sets = [];
-    for (let j = 0; j < 3; j += 1) {
-      const weightInput = document.getElementsByName(`weight-${i}-${j}`)[0];
-      const repsInput = document.getElementsByName(`reps-${i}-${j}`)[0];
-      const amrapInput = document.getElementsByName(`amrap-${i}-${j}`)[0];
-      if (!weightInput.disabled && !repsInput.disabled && !amrapInput.disabled) {
-        sets.push(new ExerciseSet(weightInput.value, repsInput.value, amrapInput.checked));
+    const exerciseName = exerciseRow.getElementsByClassName('exercise-input')[0].value.toLowerCase();
+    if (exerciseName) {
+      for (let j = 0; j < 3; j += 1) {
+        const weightInput = document.getElementsByName(`weight-${i}-${j}`)[0];
+        const repsInput = document.getElementsByName(`reps-${i}-${j}`)[0];
+        const amrapInput = document.getElementsByName(`amrap-${i}-${j}`)[0];
+        if (!weightInput.disabled && !repsInput.disabled && !amrapInput.disabled) {
+          sets.push(new ExerciseSet(weightInput.value, repsInput.value, amrapInput.checked));
+        }
       }
-    }
 
-    const exerciseName = exerciseRow.getElementsByClassName('exercise-input')[0].value;
-    exercises.push(new Exercise(exerciseName, sets));
+      exercises.push(new Exercise(exerciseName, sets));
+    }
   });
 
-  let workouts = getWorkouts();
-  const workout = new Workout(date, type, exercises, getMaxWorkoutId(workouts) + 1);
-  let done = false;
+  if (exercises.length) {
+    let workouts = getWorkouts();
+    const workout = new Workout(date, type, exercises, getMaxWorkoutId(workouts) + 1);
+    let done = false;
 
-  workouts = workouts.reduce((acc, curr) => {
-    if (!done && curr.date < workout.date) {
-      done = true;
-      return acc.concat(workout, curr);
+    workouts = workouts.reduce((acc, curr) => {
+      if (!done && curr.date < workout.date) {
+        done = true;
+        return acc.concat(workout, curr);
+      }
+      return acc.concat(curr);
+    }, []);
+
+    if (!done) {
+      workouts.push(workout);
     }
-    return acc.concat(curr);
-  }, []);
 
-  if (!done) {
-    workouts.push(workout);
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+    window.location = 'index.html';
   }
-
-  localStorage.setItem('workouts', JSON.stringify(workouts));
-  window.location = 'index.html';
 }

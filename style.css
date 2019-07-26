@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background-color: #31333C;
+    background-color: #3E4152;
 }
 
 header {
@@ -32,7 +32,7 @@ header {
 }
 
 .main-container {
-    background-color: #31333C;
+    /* background-color: #31333C; */
     color: #F5EBF3;
     border-radius: 5px;
     padding: 10px;
@@ -44,7 +44,7 @@ header {
     color: #F5EBF3;
     border-radius: 5px;
     box-shadow: -6px -8px 24px rgba(0,0,0,0.2);
-    border: 1px solid #7C7A63;
+    /* border: 1px solid #7C7A63; */
     /* padding: 20px; */
 }
 
@@ -194,4 +194,50 @@ select {
     color: #FFF;
     background-color: #3D3D3D;
     border-color: #3D3D3D;
+}
+
+.button-warn {
+    color: #FFF;
+    background-color: #FF4423;
+    border-color: #FF4423;
+}
+
+.button-warn:hover, .button-warn:focus {
+    color: #FFF;
+    background-color: #E94224;
+    border-color: #E94224;
+}
+
+.button-delete {
+    margin-left: auto;
+    height: 100%;
+    border-radius: 0px 5px 0px 0px;
+}
+
+.workout-header {
+    display: flex;
+    padding-left: 10px;
+}
+
+.workout-header > * {
+    margin-bottom: 0px;
+}
+
+#dimmer {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.confirm-delete-popup {
+    padding: 100px;
+    box-shadow: 4px 5px 30px rgba(0,0,0,0.3);
+    background-color: #F5EBF3;
+    border-radius: 10px;
 }

@@ -10,9 +10,21 @@ class Workout {
     const container = document.createElement('div');
     container.className = 'workout';
 
+    const head = document.createElement('div');
+    head.className = 'workout-header';
+
     const title = document.createElement('h4');
     title.innerHTML = `${new Date(this.date).toLocaleDateString('en-GB')} <small>${this.type}</small>`;
-    container.appendChild(title);
+    head.appendChild(title);
+
+    const btn = document.createElement('button');
+    btn.className = 'button-delete button-warn';
+    btn.innerText = 'Delete';
+    btn.dataset.workoutId = this.id;
+    btn.setAttribute('onclick', 'confirmDeleteWorkout(this)');
+    head.appendChild(btn);
+
+    container.appendChild(head);
 
     const exerciseList = document.createElement('ul');
     exerciseList.className = 'exercise-list row';
