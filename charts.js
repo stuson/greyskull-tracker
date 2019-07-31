@@ -92,7 +92,7 @@ class HistoryChart {
       .data(d => d.exercises)
       .enter()
       .append('circle')
-      .attr('r', 8)
+      .attr('r', 3)
       .attr('cx', d => this.x(d.date))
       .attr('cy', d => this.y(d.weight))
       .style('fill', d => d.color);
