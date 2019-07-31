@@ -1,18 +1,18 @@
 class HistoryChart {
   constructor(exercises) {
     this.exercises = exercises;
+  }
 
+  draw() {
     this.margin = {
       top: 20, right: 80, bottom: 30, left: 50,
     };
+
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleTime().range([0, this.width]);
     this.y = d3.scaleLinear().range([this.height, 0]);
-  }
-
-  draw() {
     this.svg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom)
