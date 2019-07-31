@@ -61,11 +61,9 @@ class HistoryChart {
 
     this.line = d3.line()
       .x((d) => {
-        console.log(d.date, this.x(d.date));
         return this.x(d.date);
       })
       .y((d) => {
-        console.log(d.weight, this.y(d.weight));
         return this.y(d.weight);
       })
       .curve(d3.curveCatmullRom.alpha(0.5));
