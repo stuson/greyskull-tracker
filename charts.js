@@ -66,10 +66,10 @@ class HistoryChart {
       .y((d) => {
         return this.y(d.weight);
       })
-      .curve(d3.curveCatmullRom.alpha(0.5));
+      .curve(d3.curveCatmullRom.alpha(0.9));
 
     this.paths = g.enter()
-      .append(d => document.createElement('path'))
+      .append('path')
       .attr('class', 'line')
       .attr('stroke', d => d.color)
       .attr('stroke-width', 3)
