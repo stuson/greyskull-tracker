@@ -241,3 +241,8 @@ select {
     background-color: #F5EBF3;
     border-radius: 10px;
 }
+
+.line {
+    fill: none;
+    stroke-width: 2px;
+}
