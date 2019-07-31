@@ -8,7 +8,7 @@ class HistoryChart {
       top: 20, right: 80, bottom: 30, left: 50,
     };
 
-    this.width = 900 - this.margin.left - this.margin.right;
+    this.width = document.getElementById('charts-container').clientWidth - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleTime().range([0, this.width]);
