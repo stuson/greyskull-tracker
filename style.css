@@ -246,3 +246,9 @@ select {
     fill: none;
     stroke-width: 2px;
 }
+
+.warning-header {
+    font-size: 1.5rem;
+    color: #E94224;
+    margin-left: 10px;
+}
