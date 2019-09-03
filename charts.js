@@ -123,7 +123,10 @@ class HistoryChart {
       .tickFormat('');
 
     this.yAxis = d3.axisLeft()
-      .scale(this.y);
+      .scale(this.y)
+      .tickValues(new Array(Math.ceil(d3.max(flatWeights))).fill(0).map((x, i) => i * 2.5))
+      .tickFormat((d, i) => i % 2 === 0 ? d : '')
+      .tickSizeInner(-this.width, 0);
 
     this.svg.append('g')
       .attr('transform', `translate(0, ${this.height})`)
@@ -136,6 +139,7 @@ class HistoryChart {
       .call(this.minorXAxis);
 
     this.svg.append('g')
+      .attr('id', 'yAxis')
       .call(this.yAxis);
 
     this.dots = g.enter().selectAll('circle')

@@ -260,10 +260,18 @@ circle {
     margin-left: 10px;
 }
 
-.tick line {
+#xAxis .tick line {
     opacity: 0.5;
 }
 
 #minorXAxis .tick line {
     opacity: 0.2;
+}
+
+#yAxis .tick line {
+    opacity: 0.08;
+}
+
+#yAxis .tick:nth-child(even) line {
+    opacity: 0.25;
 }
