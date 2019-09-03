@@ -5,7 +5,7 @@ class HistoryChart {
 
   draw() {
     this.margin = {
-      top: 20, right: 80, bottom: 30, left: 50,
+      top: 80, right: 80, bottom: 30, left: 50,
     };
 
     this.width = document.getElementById('charts-container').clientWidth - this.margin.left - this.margin.right;
@@ -45,15 +45,15 @@ class HistoryChart {
       .style('fill', '#FFFFFF');
 
     this.legend.append('rect')
-      .attr('x', this.width - 50)
-      .attr('y', (d, i) => i * 20)
+      .attr('x', (d, i) => (i * 140) % (140 * Math.round(this.width / 140)))
+      .attr('y', (d, i) => Math.floor(i * 140 / this.width) * 20 - this.margin.top)
       .attr('width', 10)
       .attr('height', 10)
       .style('fill', d => d.color);
 
     this.legend.append('text')
-      .attr('x', this.width - 28)
-      .attr('y', (d, i) => i * 20 + 9)
+      .attr('x', (d, i) => (i * 140 + 20) % (140 * Math.round(this.width / 140)))
+      .attr('y', (d, i) => 10 + Math.floor(i * 140 / this.width) * 20 - this.margin.top)
       .text(d => d.name);
 
     this.x.domain(d3.extent(flatDates));
