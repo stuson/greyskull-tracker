@@ -68,7 +68,7 @@ class HistoryChart {
             this.svg.select('#xAxis').call(this.xAxis.scale(newX));
             this.xAxis
               .ticks(d3.timeDay.every(Math.ceil(1 / d3.event.transform.k)))
-              .tickFormat((d, i) => i % Math.ceil(2 / d3.event.transform.k) === 0 ? d.toLocaleDateString('en-GB') : '');
+              .tickFormat((d, i) => i % Math.ceil(1600 / (d3.event.transform.k * this.width)) === 0 ? d.toLocaleDateString('en-GB') : '');
           }),
       )
       .append('g')
@@ -117,7 +117,7 @@ class HistoryChart {
       .scale(this.x)
       .ticks(d3.timeDay.every(1))
       .tickSizeInner(-this.height, 0)
-      .tickFormat((d, i) => i % 4 === 0 ? d.toLocaleDateString('en-GB') : '');
+      .tickFormat((d, i) => i % Math.ceil(1600 / this.width) === 0 ? d.toLocaleDateString('en-GB') : '');
 
     this.yAxis = d3.axisLeft()
       .scale(this.y);
@@ -134,7 +134,7 @@ class HistoryChart {
       .data(d => d.exercises)
       .enter()
       .append('circle')
-      .attr('r', 3)
+      .attr('r', 6)
       .attr('cx', d => this.x(d.date))
       .attr('cy', d => this.y(d.weight))
       .style('fill', d => d.color);

@@ -250,6 +250,8 @@ select {
 
 circle {
     clip-path: url(#clip);
+    stroke-width: 1;
+    stroke: #fff;
 }
 
 .warning-header {
