@@ -9,12 +9,12 @@ class HistoryChart {
     };
     this.legendMargin = {
       top: 10, right: 80, bottom: 10, left: 50,
-    }
+    };
 
     this.width = document.getElementById('charts-container').clientWidth - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
 
-    this.x = d3.scaleTime().range([0, this.width]);
+    this.x = d3.scaleTime().range([-this.width * 3, this.width]);
     this.y = d3.scaleLinear().range([this.height, 0]);
     this.legendSvg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.legendMargin.left + this.legendMargin.right)
@@ -24,6 +24,27 @@ class HistoryChart {
     this.svg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom)
+      .call(
+        d3.zoom()
+          .scaleExtent([0, 1])
+          .on('zoom', (_) => {
+            const newX = d3.event.transform.rescaleX(this.x);
+            // const newTicks = this.xAxis.scale(newX).ticks()
+            //   .tickSize(this.width, 0);
+            const newLine = d3.line()
+              .x((d) => {
+                return newX(d.date);
+              })
+              .y((d) => {
+                return this.y(d.weight);
+              })
+              .curve(d3.curveCatmullRom.alpha(0.9));
+            this.svg.selectAll('circle').attr('cx', d => newX(d.date));
+            this.paths.attr('d', d => newLine(d.exercises));
+            this.svg.select('#xAxis').call(this.xAxis.scale(newX));
+            // this.svg.select('#ticks').call(newTicks);
+          }),
+      )
       .append('g')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
@@ -43,9 +64,6 @@ class HistoryChart {
       ],
       [],
     );
-
-    const leg = this.legendSvg.selectAll('g')
-      .data(this.exercises);
 
     const g = this.svg.selectAll('g')
       .data(this.exercises);
@@ -87,13 +105,24 @@ class HistoryChart {
       .attr('d', d => this.line(d.exercises));
 
     this.xAxis = d3.axisBottom()
-      .scale(this.x);
+      .scale(this.x)
+      .ticks(50)
+      .tickSizeInner(-this.height, 0);
 
     this.yAxis = d3.axisLeft()
       .scale(this.y);
 
+    // this.ticks = this.xAxis.ticks()
+    //   .tickSize(this.width, 20);
+
+    // this.svg.append('g')
+    //   .attr('id', 'ticks')
+    //   .attr('color', '#777')
+    //   .call(this.ticks);
+
     this.svg.append('g')
       .attr('transform', `translate(0, ${this.height})`)
+      .attr('id', 'xAxis')
       .call(this.xAxis);
 
     this.svg.append('g')
@@ -107,6 +136,7 @@ class HistoryChart {
       .attr('cx', d => this.x(d.date))
       .attr('cy', d => this.y(d.weight))
       .style('fill', d => d.color);
+
   }
 }
 
