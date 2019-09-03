@@ -52,7 +52,7 @@ class HistoryChart {
       .call(
         d3.zoom()
           .scaleExtent([0.02, 3.2])
-          .translateExtent([[this.x(minDate) - this.width / 2, 0], [this.x(maxDate) + this.width / 2, 0]])
+          .translateExtent([[this.x(minDate) - this.width, 0], [this.x(maxDate) + this.width, 0]])
           .on('zoom', (_) => {
             const newX = d3.event.transform.rescaleX(this.x);
             const newLine = d3.line()
