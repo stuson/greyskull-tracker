@@ -4,6 +4,23 @@ class HistoryChart {
   }
 
   draw() {
+    const flatExercises = this.exercises.map(x => x.exercises);
+    const flatWeights = flatExercises.reduce(
+      (acc, curr) => [
+        ...acc,
+        ...curr.map(set => set.weight),
+      ],
+      [],
+    );
+
+    const flatDates = flatExercises.reduce(
+      (acc, curr) => [
+        ...acc,
+        ...curr.map(set => set.date),
+      ],
+      [],
+    );
+
     this.margin = {
       top: 80, right: 80, bottom: 30, left: 50,
     };
@@ -14,8 +31,15 @@ class HistoryChart {
     this.width = document.getElementById('charts-container').clientWidth - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
 
-    this.x = d3.scaleTime().range([-this.width * 3, this.width]);
+    this.x = d3.scaleTime().range([0, this.width]);
     this.y = d3.scaleLinear().range([this.height, 0]);
+
+    const maxDate = new Date(Math.max(...flatDates));
+    const thirtyDaysAgo = new Date(maxDate - 1000 * 60 * 60 * 24 * 30)
+    const minDate = new Date(Math.max(Math.min(...flatDates), thirtyDaysAgo));
+    this.x.domain([minDate, maxDate]);
+    this.y.domain([0, d3.max(flatWeights) + 10]);
+
     this.legendSvg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.legendMargin.left + this.legendMargin.right)
       .attr('height', Math.floor(this.exercises.length * 140 / this.width) + this.legendMargin.top + this.legendMargin.bottom)
@@ -26,7 +50,8 @@ class HistoryChart {
       .attr('height', this.height + this.margin.top + this.margin.bottom)
       .call(
         d3.zoom()
-          .scaleExtent([0, 1])
+          .scaleExtent([0.02, 3.2])
+          .translateExtent([[this.x(minDate) - this.width / 2, 0], [this.x(maxDate) + this.width / 2, 0]])
           .on('zoom', (_) => {
             const newX = d3.event.transform.rescaleX(this.x);
             // const newTicks = this.xAxis.scale(newX).ticks()
@@ -48,23 +73,6 @@ class HistoryChart {
       .append('g')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
-    const flatExercises = this.exercises.map(x => x.exercises)
-    const flatWeights = flatExercises.reduce(
-      (acc, curr) => [
-        ...acc,
-        ...curr.map(set => set.weight),
-      ],
-      [],
-    );
-
-    const flatDates = flatExercises.reduce(
-      (acc, curr) => [
-        ...acc,
-        ...curr.map(set => set.date),
-      ],
-      [],
-    );
-
     const g = this.svg.selectAll('g')
       .data(this.exercises);
 
@@ -85,9 +93,6 @@ class HistoryChart {
       .attr('y', (d, i) => 10 + Math.floor(i * 140 / this.width) * 20 - this.margin.top)
       .text(d => d.name);
 
-    this.x.domain(d3.extent(flatDates));
-    this.y.domain([0, d3.max(flatWeights)]);
-
     this.line = d3.line()
       .x((d) => {
         return this.x(d.date);
@@ -106,7 +111,7 @@ class HistoryChart {
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
-      .ticks(50)
+      .ticks(25)
       .tickSizeInner(-this.height, 0);
 
     this.yAxis = d3.axisLeft()
