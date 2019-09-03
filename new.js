@@ -271,6 +271,8 @@ function addExercise() {
     .insertBefore(frag, document.getElementById('first-button'));
 }
 
+let saveTimer;
+
 function setupNew() {
   const workouts = getWorkouts();
   const lastWorkout = workouts[0];
@@ -278,9 +280,10 @@ function setupNew() {
   setDefaultDate();
   setLastWorkout(lastWorkout);
   populateDefaultExercises(workouts);
+  saveTimer = setInterval(saveCurrentWorkout, 10000);
 }
 
-function submitWorkout() {
+function getInputData() {
   const date = new Date(
     document.getElementById('year').value,
     document.getElementById('month').value - 1,
@@ -307,6 +310,59 @@ function submitWorkout() {
     }
   });
 
+  return { date, type, exercises };
+}
+
+function saveCurrentWorkout() {
+  const inputData = getInputData();
+  localStorage.setItem('currentWorkout', JSON.stringify(inputData));
+}
+
+function fillFromCurrentworkout() {
+  const currentWorkout = classifyStorage([JSON.parse(localStorage.getItem('currentWorkout'))])[0];
+  const date = new Date(currentWorkout.date);
+  if (currentWorkout) {
+    document.getElementById('year').value = date.getFullYear();
+    document.getElementById('month').value = date.getMonth() + 1;
+    document.getElementById('day').value = date.getDate();
+
+    document.getElementById('workout-type').value = currentWorkout.type;
+
+    currentWorkout.exercises.forEach((exercise, i) => {
+      if (i > 4) {
+        addExercise();
+      }
+
+      const nameInput = document.getElementsByName(`exercise-${i}`)[0];
+      if (nameInput) {
+        nameInput.value = exercise.getDisplayName();
+      }
+
+      exercise.sets.forEach((set, j) => {
+        const weightInput = document.getElementsByName(`weight-${i}-${j}`)[0];
+        const repsInput = document.getElementsByName(`reps-${i}-${j}`)[0];
+        const amrapInput = document.getElementsByName(`amrap-${i}-${j}`)[0];
+
+        weightInput.value = set.weight;
+        repsInput.value = set.reps;
+        amrapInput.checked = set.amrap;
+      });
+    });
+  }
+}
+
+function removeCurrentWorkout() {
+  clearInterval(saveTimer);
+  localStorage.removeItem('currentWorkout');
+}
+
+function cancelWorkout() {
+  removeCurrentWorkout();
+  window.location = 'index.html';
+}
+
+function submitWorkout() {
+  const { date, type, exercises } = getInputData();
   if (exercises.length) {
     let workouts = getWorkouts();
     const workout = new Workout(date, type, exercises, getMaxWorkoutId(workouts) + 1);
@@ -325,6 +381,7 @@ function submitWorkout() {
     }
 
     localStorage.setItem('workouts', JSON.stringify(workouts));
+    removeCurrentWorkout();
     window.location = 'index.html';
   }
 }
