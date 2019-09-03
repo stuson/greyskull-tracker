@@ -22,7 +22,7 @@ class HistoryChart {
     );
 
     this.margin = {
-      top: 80, right: 80, bottom: 30, left: 50,
+      top: 20, right: 80, bottom: 30, left: 50,
     };
     this.legendMargin = {
       top: 10, right: 80, bottom: 10, left: 50,
@@ -42,9 +42,10 @@ class HistoryChart {
 
     this.legendSvg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.legendMargin.left + this.legendMargin.right)
-      .attr('height', Math.floor(this.exercises.length * 140 / this.width) + this.legendMargin.top + this.legendMargin.bottom)
+      .attr('height', Math.floor(this.exercises.length * 140 / this.width) * 20 + this.legendMargin.top + this.legendMargin.bottom)
       .append('g')
-      .attr('transform', `translate(${this.legendMargin.left}, ${this.legendMargin.left})`);
+      .attr('transform', `translate(${this.legendMargin.left}, ${this.legendMargin.top})`);
+
     this.svg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom)
@@ -54,8 +55,6 @@ class HistoryChart {
           .translateExtent([[this.x(minDate) - this.width / 2, 0], [this.x(maxDate) + this.width / 2, 0]])
           .on('zoom', (_) => {
             const newX = d3.event.transform.rescaleX(this.x);
-            // const newTicks = this.xAxis.scale(newX).ticks()
-            //   .tickSize(this.width, 0);
             const newLine = d3.line()
               .x((d) => {
                 return newX(d.date);
@@ -73,24 +72,27 @@ class HistoryChart {
       .append('g')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
+    const lg = this.legendSvg.selectAll('g')
+      .data(this.exercises);
+
     const g = this.svg.selectAll('g')
       .data(this.exercises);
 
-    this.legend = g.enter()
+    this.legend = lg.enter()
       .append('g')
       .attr('class', 'legend')
       .style('fill', '#FFFFFF');
 
     this.legend.append('rect')
       .attr('x', (d, i) => (i * 140) % (140 * Math.round(this.width / 140)))
-      .attr('y', (d, i) => Math.floor(i * 140 / this.width) * 20 - this.margin.top)
+      .attr('y', (d, i) => Math.floor(i * 140 / this.width) * 20 - this.legendMargin.top)
       .attr('width', 10)
       .attr('height', 10)
       .style('fill', d => d.color);
 
     this.legend.append('text')
       .attr('x', (d, i) => (i * 140 + 20) % (140 * Math.round(this.width / 140)))
-      .attr('y', (d, i) => 10 + Math.floor(i * 140 / this.width) * 20 - this.margin.top)
+      .attr('y', (d, i) => 10 + Math.floor(i * 140 / this.width) * 20 - this.legendMargin.top)
       .text(d => d.name);
 
     this.line = d3.line()
@@ -116,14 +118,6 @@ class HistoryChart {
 
     this.yAxis = d3.axisLeft()
       .scale(this.y);
-
-    // this.ticks = this.xAxis.ticks()
-    //   .tickSize(this.width, 20);
-
-    // this.svg.append('g')
-    //   .attr('id', 'ticks')
-    //   .attr('color', '#777')
-    //   .call(this.ticks);
 
     this.svg.append('g')
       .attr('transform', `translate(0, ${this.height})`)
