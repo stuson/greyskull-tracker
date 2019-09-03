@@ -66,9 +66,7 @@ class HistoryChart {
             this.svg.selectAll('circle').attr('cx', d => newX(d.date));
             this.paths.attr('d', d => newLine(d.exercises));
             this.svg.select('#xAxis').call(this.xAxis.scale(newX));
-            this.xAxis
-              .ticks(d3.timeDay.every(Math.ceil(1 / d3.event.transform.k)))
-              .tickFormat((d, i) => i % Math.ceil(1600 / (d3.event.transform.k * this.width)) === 0 ? d.toLocaleDateString('en-GB') : '');
+            this.svg.select('#minorXAxis').call(this.minorXAxis.scale(newX));
           }),
       )
       .append('g')
@@ -115,9 +113,14 @@ class HistoryChart {
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
+      .ticks(Math.ceil(this.width / 65))
+      .tickSizeInner(-this.height, 0);
+
+    this.minorXAxis = d3.axisBottom()
+      .scale(this.x)
       .ticks(d3.timeDay.every(1))
       .tickSizeInner(-this.height, 0)
-      .tickFormat((d, i) => i % Math.ceil(1600 / this.width) === 0 ? d.toLocaleDateString('en-GB') : '');
+      .tickFormat('');
 
     this.yAxis = d3.axisLeft()
       .scale(this.y);
@@ -126,6 +129,11 @@ class HistoryChart {
       .attr('transform', `translate(0, ${this.height})`)
       .attr('id', 'xAxis')
       .call(this.xAxis);
+
+    this.svg.append('g')
+      .attr('transform', `translate(0, ${this.height})`)
+      .attr('id', 'minorXAxis')
+      .call(this.minorXAxis);
 
     this.svg.append('g')
       .call(this.yAxis);

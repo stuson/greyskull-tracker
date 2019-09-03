@@ -263,3 +263,7 @@ circle {
 .tick line {
     opacity: 0.5;
 }
+
+#minorXAxis .tick line {
+    opacity: 0.2;
+}
