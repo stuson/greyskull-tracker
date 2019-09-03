@@ -7,12 +7,20 @@ class HistoryChart {
     this.margin = {
       top: 80, right: 80, bottom: 30, left: 50,
     };
+    this.legendMargin = {
+      top: 10, right: 80, bottom: 10, left: 50,
+    }
 
     this.width = document.getElementById('charts-container').clientWidth - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleTime().range([0, this.width]);
     this.y = d3.scaleLinear().range([this.height, 0]);
+    this.legendSvg = d3.select('#charts-container').append('svg')
+      .attr('width', this.width + this.legendMargin.left + this.legendMargin.right)
+      .attr('height', Math.floor(this.exercises.length * 140 / this.width) + this.legendMargin.top + this.legendMargin.bottom)
+      .append('g')
+      .attr('transform', `translate(${this.legendMargin.left}, ${this.legendMargin.left})`);
     this.svg = d3.select('#charts-container').append('svg')
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom)
@@ -35,6 +43,9 @@ class HistoryChart {
       ],
       [],
     );
+
+    const leg = this.legendSvg.selectAll('g')
+      .data(this.exercises);
 
     const g = this.svg.selectAll('g')
       .data(this.exercises);
