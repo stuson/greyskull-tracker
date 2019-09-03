@@ -245,6 +245,11 @@ select {
 .line {
     fill: none;
     stroke-width: 2px;
+    clip-path: url(#clip);
+}
+
+circle {
+    clip-path: url(#clip);
 }
 
 .warning-header {

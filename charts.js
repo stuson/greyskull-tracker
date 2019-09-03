@@ -136,6 +136,11 @@ class HistoryChart {
       .attr('cy', d => this.y(d.weight))
       .style('fill', d => d.color);
 
+    this.clip = this.svg.append('clipPath')
+      .attr('id', 'clip')
+      .append('rect')
+      .attr('width', this.width)
+      .attr('height', this.height);
   }
 }
 
