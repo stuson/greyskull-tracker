@@ -113,7 +113,7 @@ class HistoryChart {
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
-      .ticks(25)
+      .ticks()
       .tickSizeInner(-this.height, 0);
 
     this.yAxis = d3.axisLeft()
