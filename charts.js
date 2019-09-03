@@ -151,9 +151,17 @@ function mapWorkoutsForChart(workouts) {
   return exercises;
 }
 
+function redrawChart(chart) {
+  const svgs = document.getElementsByTagName('svg');
+  Array.from(svgs).forEach(svg => svg.remove());
+  chart.draw()
+}
+
 function createCharts() {
   const workouts = getWorkouts();
   const exercises = mapWorkoutsForChart(workouts);
   const chart = new HistoryChart(exercises);
   chart.draw();
+
+  window.addEventListener('resize', redrawChart.bind(null, chart));
 }
