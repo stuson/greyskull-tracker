@@ -149,6 +149,11 @@ function cancelAction(e) {
   }
 }
 
+function confirmAction(action) {
+  action();
+  document.getElementById('dimmer').remove();
+}
+
 function deleteWorkout(workoutId) {
   let workouts = getWorkouts();
   workouts = workouts.filter(workout => workout.id !== workoutId);
