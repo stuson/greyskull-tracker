@@ -16,6 +16,10 @@ function exportWorkouts() {
   showMessage(document.getElementById('copied-alert'));
 }
 
+function showImportWarning() {
+  showWarning('Overwrite all workout data?', importWorkouts);
+}
+
 function importWorkouts() {
   const textElement = document.getElementById('workout-data');
   const b64 = textElement.value;
