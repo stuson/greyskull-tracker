@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <title>Greyskull v1.0</title>
 </head>
-<body onload="createCharts()">
+
+<body>
     <!-- Site Header -->
     <header>
         <nav class="container">
-            <a class="site-header" href="index"><h1>Greyskull Tracker</h1></a>
+            <a class="site-header" href="index">
+                <h1>Greyskull Tracker</h1>
+            </a>
             <div class="row">
                 <a href="index.html" class="two columns nav-link">History</a>
                 <a href="new.html" class="two columns nav-link">New workout</a>
@@ -26,12 +30,30 @@
     <!-- Settings Items -->
     <div class="container main-container">
         <h2>Settings</h2>
+        <div class="settings-item">
+            <h4>Workout Data</h4>
+            <div id="workout-data-container" class="row">
+                <textarea id="workout-data" class="six columns"></textarea>
+                <div class="alerts-container six columns">
+                    <p id="copied-alert">Exported data copied to clipboard</p>
+                    <p id="imported-alert">Imported data</p>
+                    <p id="imported-error-alert">Error importing data</p>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button class="button-secondary" onclick="exportWorkouts()">Export</button>
+                <button class="button-secondary" onclick="importWorkouts()">Import</button>
+            </div>
+        </div>
     </div>
     <!-- End settings Items -->
 
     <!-- Scripts -->
     <script src="workout.js"></script>
     <script src="main.js"></script>
+    <script src="settings.js"></script>
     <!-- End Scripts -->
 </body>
+
 </html>
