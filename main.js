@@ -125,11 +125,11 @@ function showWarning(warningText, action) {
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'row button-container';
 
-  const confirmAction = document.createElement('button');
-  confirmAction.className = 'button-warn';
-  confirmAction.innerText = 'Confirm';
-  confirmAction.onclick = action;
-  buttonContainer.appendChild(confirmAction);
+  const confirm = document.createElement('button');
+  confirm.className = 'button-warn';
+  confirm.innerText = 'Confirm';
+  confirm.onclick = confirmAction.bind(null, action);
+  buttonContainer.appendChild(confirm);
 
   const cancel = document.createElement('button');
   cancel.innerText = 'Cancel';
