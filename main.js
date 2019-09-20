@@ -107,30 +107,33 @@ function getMaxWorkoutId(workouts) {
 
 function confirmDeleteWorkout(btn) {
   const workoutId = Number(btn.dataset.workoutId);
+  showWarning('Delete this workout?', deleteWorkout.bind(null, workoutId));
+}
 
+function showWarning(warningText, action) {
   const dimmer = document.createElement('div');
   dimmer.id = 'dimmer';
-  dimmer.onclick = cancelDelete;
+  dimmer.onclick = cancelAction;
 
   const popup = document.createElement('div');
-  popup.className = 'confirm-delete-popup';
+  popup.className = 'confirm-action-popup';
 
   const txt = document.createElement('h4');
-  txt.innerText = 'Delete this workout?';
+  txt.innerText = warningText;
   popup.appendChild(txt);
 
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'row button-container';
 
-  const confirmDelete = document.createElement('button');
-  confirmDelete.className = 'button-warn';
-  confirmDelete.innerText = 'Delete';
-  confirmDelete.onclick = deleteWorkout.bind(null, workoutId);
-  buttonContainer.appendChild(confirmDelete);
+  const confirmAction = document.createElement('button');
+  confirmAction.className = 'button-warn';
+  confirmAction.innerText = 'Confirm';
+  confirmAction.onclick = action;
+  buttonContainer.appendChild(confirmAction);
 
   const cancel = document.createElement('button');
   cancel.innerText = 'Cancel';
-  cancel.onclick = cancelDelete;
+  cancel.onclick = cancelAction;
   buttonContainer.appendChild(cancel);
 
   popup.appendChild(buttonContainer);
@@ -140,7 +143,7 @@ function confirmDeleteWorkout(btn) {
   document.body.appendChild(dimmer);
 }
 
-function cancelDelete(e) {
+function cancelAction(e) {
   if (e.target === this) {
     document.getElementById('dimmer').remove();
   }
